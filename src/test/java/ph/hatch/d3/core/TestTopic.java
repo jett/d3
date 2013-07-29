@@ -13,9 +13,13 @@ public class TestTopic {
         MessageSender sender = (MessageSender)context.getBean("MessageSender");
         System.out.println("Sending message...");
         sender.send("Hello world");
-//        Thread.sleep(100);
+
+        // delay so we have time to receive
+        Thread.sleep(2000);
 
         context.destroy();
     }
+
+
 
 }

@@ -1,10 +1,13 @@
 package ph.hatch.d3.eventbus.test;
 
 import net.engio.mbassy.listener.Handler;
+import org.springframework.stereotype.Component;
+import ph.hatch.ddd.domain.annotations.DomainEventListener;
 
+@Component
 public class EventHandlers {
 
-    @Handler
+    @DomainEventListener
     public void handleDummyOneEvent(DummyOneEvent dummyOneEvent) {
         try {
             Thread.sleep(2000);

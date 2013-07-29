@@ -1,5 +1,7 @@
 package ph.hatch.ddd.domain;
 
+import ph.hatch.ddd.domain.annotations.DomainEvent;
+
 import java.io.Serializable;
 
 /**
@@ -11,6 +13,7 @@ import java.io.Serializable;
  */
 public interface DomainEventPublisher {
 
-    void publish(Serializable applicationEvent);
+    //void publish(Serializable applicationEvent);
+    void publish(Object applicationEvent);
 
 }

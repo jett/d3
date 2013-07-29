@@ -4,6 +4,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+
+    <bean class="ph.hatch.ddd.infrastructure.events.MBassadorEventsPublisher" />
+    <bean class="ph.hatch.ddd.infrastructure.events.MBassadorEventsLIstenerProcessor" />
+
+    <bean class="ph.hatch.d3.eventbus.test.EventHandlers" />
+
+
    <!--<bean id="EmbeddedJms" class="org.hornetq.integration.spring.SpringJmsBootstrap" init-method="start" destroy-method="stop">-->
    <!--</bean>-->
 
@@ -21,7 +28,6 @@
     <!--</bean>-->
 
     <bean name="qConnectionFactory" class="org.hornetq.jms.client.HornetQXAConnectionFactory" >
-    <!--<bean name="qConnectionFactory" class="org.hornetq.jms.client.HornetQXATopicConnectionFactory" >-->
         <constructor-arg value="false" />
         <constructor-arg>
             <bean name="transportConfiguration" class="org.hornetq.api.core.TransportConfiguration">
@@ -49,6 +55,15 @@
         <property name="destination" ref="theTopic"/>
     </bean>
 
+
+    <bean id="listener" class="ph.hatch.d3.core.ExampleListener"/>
+
+    <!-- wire the listener -->
+    <bean id="listenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="qConnectionFactory"/>
+        <property name="destination" ref="theTopic"/>
+        <property name="messageListener" ref="listener"/>
+    </bean>
 
     <!--<bean name="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">-->
         <!--<property name="connectionFactory" ref="qConnectionFactory" />-->

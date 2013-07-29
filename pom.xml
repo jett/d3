@@ -117,8 +117,21 @@
             <version>1.2.14</version>
             <scope>runtime</scope>
         </dependency>
-
         <!--end logging-->
+
+        <!-- Google GSON -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+
+        <!-- Javassist for MBassador class manipulation -->
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.12.1.GA</version>
+        </dependency>
 
         <!-- Junit -->
         <dependency>

@@ -4,8 +4,10 @@ import net.engio.mbassy.bus.BusConfiguration;
 import net.engio.mbassy.bus.MBassador;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import ph.hatch.ddd.domain.DomainEventPublisher;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,6 +22,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 //@TransactionConfiguration
 //@Transactional
 public class EventBusTest {
+
+
+    @Autowired
+    DomainEventPublisher eventPublisher;
 
     @Test
     public void testMe() {
@@ -36,6 +42,19 @@ public class EventBusTest {
         bus.publishAsync(message); //returns immediately, publication will continue asynchronously
         System.out.println("post");
 
+        try {
+            Thread.sleep(4000);
+        } catch(Exception e) {
+            System.out.println("exception");
+        }
+
+    }
+
+    @Test
+    public void mbassadorPublishTest() {
+
+        DummyOneEvent message = new DummyOneEvent("test Details");
+        eventPublisher.publish(message);
         try {
             Thread.sleep(4000);
         } catch(Exception e) {

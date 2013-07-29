@@ -1,5 +1,9 @@
 package ph.hatch.d3.core;
 
+import org.hornetq.api.core.TransportConfiguration;
+import org.hornetq.api.jms.HornetQJMSClient;
+import org.hornetq.core.remoting.impl.netty.NettyConnectorFactory;
+
 import javax.jms.*;
 
 /**
@@ -8,42 +12,42 @@ import javax.jms.*;
  */
 public class MessageSender
 {
-   private ConnectionFactory connectionFactory;
-   private Destination destination;
+    private ConnectionFactory connectionFactory;
+    private Destination destination;
 
-   public ConnectionFactory getConnectionFactory()
-   {
-      return connectionFactory;
-   }
+    public ConnectionFactory getConnectionFactory()
+    {
+        return connectionFactory;
+    }
 
-   public void setConnectionFactory(ConnectionFactory connectionFactory)
-   {
-      this.connectionFactory = connectionFactory;
-   }
+    public void setConnectionFactory(ConnectionFactory connectionFactory)
+    {
+        this.connectionFactory = connectionFactory;
+    }
 
-   public Destination getDestination()
-   {
-      return destination;
-   }
+    public Destination getDestination()
+    {
+        return destination;
+    }
 
-   public void setDestination(Destination destination)
-   {
-      this.destination = destination;
-   }
+    public void setDestination(Destination destination)
+    {
+        this.destination = destination;
+    }
 
-   public void send(String msg)
-   {
-      try
-      {
-         Connection conn = connectionFactory.createConnection();
-         Session session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
-         MessageProducer producer = session.createProducer(destination);
-         TextMessage message = session.createTextMessage(msg);
-         producer.send(message);
-      }
-      catch (Exception ex)
-      {
-         ex.printStackTrace();
-      }
-   }
+    public void send(String msg)
+    {
+        try
+        {
+            Connection conn = connectionFactory.createConnection();
+            Session session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            MessageProducer producer = session.createProducer(destination);
+            TextMessage message = session.createTextMessage(msg);
+            producer.send(message);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
 }
