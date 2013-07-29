@@ -37,7 +37,7 @@
     </bean>
 
     <bean name="theTopic" class="org.hornetq.jms.client.HornetQTopic">
-        <constructor-arg value="TBSTopic" />
+        <constructor-arg value="IMSEvents" />
     </bean>
 
     <bean name="theQueue" class="org.hornetq.jms.client.HornetQQueue">
