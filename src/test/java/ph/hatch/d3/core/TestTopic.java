@@ -1,23 +1,48 @@
 package ph.hatch.d3.core;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import ph.hatch.d3.eventbus.test.DummyOneEvent;
+import ph.hatch.ddd.domain.DomainEventPublisher;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations="classpath:spring-jms-beans.xml")
 public class TestTopic {
 
-    public static void main(String[] args) throws Exception {
+    @Autowired
+    DomainEventPublisher eventPublisher;
 
-        System.out.println("Creating bean factory...");
+    @Autowired
+    MessageSender sender;
 
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"spring-jms-beans.xml"});
+    //public static void main(String[] args) throws Exception {
+    @Test
+    public void testDispatch() {
 
-        MessageSender sender = (MessageSender)context.getBean("MessageSender");
-        System.out.println("Sending message...");
         sender.send("Hello world");
 
-        // delay so we have time to receive
-        Thread.sleep(2000);
+        DummyOneEvent message = new DummyOneEvent("test Details");
+        eventPublisher.publish(message);
 
-        context.destroy();
+        // delay so we have time to receive
+        try {
+            Thread.sleep(1000);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("test async done");
+
+        try {
+            Thread.sleep(2000);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 

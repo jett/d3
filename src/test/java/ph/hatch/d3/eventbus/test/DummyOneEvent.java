@@ -3,7 +3,7 @@ package ph.hatch.d3.eventbus.test;
 public class DummyOneEvent {
     String details;
 
-    DummyOneEvent(String details) {
+    public DummyOneEvent(String details) {
         this.details = details;
     }
 

@@ -16,7 +16,7 @@ public class MBassadorEventsPublisher implements DomainEventPublisher  {
     MBassador bus = new MBassador(BusConfiguration.Default());
 
     public void registerListener(Object listener) {
-        System.out.println("registering a listener");
+        // System.out.println("registering a listener for " + listener );
         bus.subscribe(listener);
     }
 
