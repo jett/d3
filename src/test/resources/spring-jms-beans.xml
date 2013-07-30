@@ -10,7 +10,9 @@
 
     <context:annotation-config/>
 
-    <bean class="ph.hatch.ddd.infrastructure.events.MBassadorEventsPublisher" />
+    <bean id="localPublisher" class="ph.hatch.ddd.infrastructure.events.MBassadorEventsPublisher" />
+    <bean id="jmsPublisher" class="ph.hatch.ddd.infrastructure.events.JMSEventsPublisher" />
+
     <bean class="ph.hatch.ddd.infrastructure.events.MBassadorEventsLIstenerProcessor" />
 
     <bean class="ph.hatch.d3.eventbus.test.EventHandlers" />
@@ -60,8 +62,14 @@
         <property name="destination" ref="theTopic"/>
     </bean>
 
+    <bean id="jmsMessageSender" class="ph.hatch.ddd.infrastructure.events.MBassadorJMSEventSender">
+        <property name="connectionFactory" ref="qConnectionFactory"/>
+        <property name="destination" ref="theTopic"/>
+    </bean>
 
-    <bean id="listener" class="ph.hatch.d3.core.ExampleListener"/>
+    <!--<bean id="listener" class="ph.hatch.d3.core.ExampleListener"/>-->
+    <bean id="listener" class="ph.hatch.ddd.infrastructure.events.MBassadorJMSEventListener"/>
+
 
     <!-- wire the listener -->
     <bean id="listenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">

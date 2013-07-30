@@ -6,15 +6,10 @@ import net.engio.mbassy.bus.BusConfiguration;
 import net.engio.mbassy.bus.MBassador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ph.hatch.ddd.application.ApplicationEventPublisher;
 import ph.hatch.ddd.domain.DomainEventPublisher;
-import ph.hatch.ddd.domain.annotations.DomainEvent;
-
-import java.io.Serializable;
-import java.util.Map;
 
 @Component
-public class MBassadorEventsPublisher implements DomainEventPublisher  {
+public class JMSEventsPublisher implements DomainEventPublisher  {
 
     @Autowired
     MBassadorJMSEventSender sender;
@@ -30,7 +25,15 @@ public class MBassadorEventsPublisher implements DomainEventPublisher  {
     @Override
     public void publish(Object event) {
 
-        bus.publish(event);
+        // bus.publish(event);
+        Gson gson = new Gson();
+
+        String eventClassName = event.getClass().getName();
+        String eventDetails = gson.toJson(event);
+
+        EventEnvelope envelope = new EventEnvelope(eventClassName, eventDetails);
+
+        sender.send(envelope);
 
     }
 

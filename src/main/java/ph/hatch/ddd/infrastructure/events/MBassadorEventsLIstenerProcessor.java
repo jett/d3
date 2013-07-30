@@ -11,6 +11,7 @@ import net.engio.mbassy.listener.Invoke;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
 import org.springframework.context.ApplicationContext;
@@ -27,6 +28,7 @@ public class MBassadorEventsLIstenerProcessor  implements ApplicationContextAwar
     private ConfigurableListableBeanFactory beanFactory;
 
     @Autowired
+    @Qualifier("localPublisher")
     private MBassadorEventsPublisher eventPublisher;
 
     protected ApplicationContext applicationContext;
