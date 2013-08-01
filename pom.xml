@@ -85,11 +85,11 @@
             <version>3.2.7.Final</version>
         </dependency>
 
-        <dependency>
-            <groupId>javax.jms</groupId>
-            <artifactId>jms</artifactId>
-            <version>1.1</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>javax.jms</groupId>-->
+            <!--<artifactId>jms</artifactId>-->
+            <!--<version>1.1</version>-->
+        <!--</dependency>-->
 
         <!--logging-->
         <!-- http://blog.springsource.org/2009/12/04/logging-dependencies-in-spring/ -->

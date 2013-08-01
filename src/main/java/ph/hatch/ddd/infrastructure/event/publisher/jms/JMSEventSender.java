@@ -1,9 +1,8 @@
-package ph.hatch.ddd.infrastructure.events;
+package ph.hatch.ddd.infrastructure.event.publisher.jms;
 
 import javax.jms.*;
-import java.util.Map;
 
-public class MBassadorJMSEventSender {
+public class JMSEventSender {
 
     private ConnectionFactory connectionFactory;
     private Destination destination;
@@ -54,7 +53,7 @@ public class MBassadorJMSEventSender {
 
             MapMessage message = session.createMapMessage();
             message.setString("eventClass", eventEnvelope.getEventClassName());
-            message.setString("eventDetails", eventEnvelope.getEventClassDetails());
+            message.setString("eventDetails", eventEnvelope.getEventDetails());
 
             producer.send(message);
 

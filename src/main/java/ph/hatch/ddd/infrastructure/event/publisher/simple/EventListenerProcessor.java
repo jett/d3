@@ -1,4 +1,4 @@
-package ph.hatch.ddd.infrastructure.events;
+package ph.hatch.ddd.infrastructure.event.publisher.simple;
 
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;

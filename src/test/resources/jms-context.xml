@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-3.0.xsd">
+
+
+    <context:annotation-config/>
+
+    <!-- Start: JMS requirements -->
+    <bean name="qConnectionFactory" class="org.hornetq.jms.client.HornetQXAConnectionFactory" >
+        <constructor-arg value="false" />
+        <constructor-arg>
+            <bean name="transportConfiguration" class="org.hornetq.api.core.TransportConfiguration">
+                <constructor-arg value="org.hornetq.core.remoting.impl.netty.NettyConnectorFactory" />
+                <constructor-arg>
+                    <map key-type="java.lang.String" value-type="java.lang.Object">
+                        <entry key="host" value="127.0.0.1" />
+                        <entry key="port" value="5445" />
+                    </map>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean name="imsEventsTopic" class="org.hornetq.jms.client.HornetQTopic">
+        <constructor-arg value="IMSEvents" />
+    </bean>
+
+    <bean id="jmsMessageSender" class="ph.hatch.ddd.infrastructure.event.publisher.jms.JMSEventSender">
+        <property name="connectionFactory" ref="qConnectionFactory"/>
+        <property name="destination" ref="imsEventsTopic"/>
+    </bean>
+
+    <jms:listener-container container-type="default"
+                            connection-factory="qConnectionFactory" acknowledge="auto" destination-type="topic">
+
+        <jms:listener destination="IMSEvents" ref="listener" method="onMessage"/>
+        <jms:listener destination="CMSEvents" ref="listener" method="onMessage"/>
+
+    </jms:listener-container>
+    <!-- End: JMS requirements -->
+
+    <!-- setup our dispatcher -->
+    <bean class="ph.hatch.ddd.infrastructure.event.dispatcher.mbassador.MBassadorEventDispatcher"/>
+    <bean class="ph.hatch.ddd.infrastructure.event.dispatcher.mbassador.MBassadorEventsListenerProcessor"/>
+
+    <!-- listens to messages from the topic -->
+    <bean id="listener" class="ph.hatch.ddd.infrastructure.event.publisher.jms.MBassadorJMSEventListener"/>
+
+    <!-- JMS -->
+    <bean class="ph.hatch.ddd.infrastructure.event.publisher.jms.JMSEventPublisher"/>
+
+    <!-- autoscan all event handlers -->
+    <context:component-scan base-package="ph.hatch.d3.infrastructure.event.publisher.simple.eventhandlers"/>
+
+</beans>

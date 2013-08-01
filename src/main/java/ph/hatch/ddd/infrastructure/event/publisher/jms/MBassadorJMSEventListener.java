@@ -1,10 +1,12 @@
-package ph.hatch.ddd.infrastructure.events;
+package ph.hatch.ddd.infrastructure.event.publisher.jms;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import ph.hatch.ddd.domain.DomainEvent;
 import ph.hatch.ddd.domain.annotations.DomainEventPublisher;
+import ph.hatch.ddd.event.EventDispatcher;
 
 import javax.jms.*;
 
@@ -13,11 +15,9 @@ public class MBassadorJMSEventListener implements MessageListener
 {
 
     @Autowired
-    @Qualifier("localPublisher")
-    DomainEventPublisher eventPublisher;
+    EventDispatcher eventDispatcher;
 
-    public void onMessage(Message message)
-    {
+    public void onMessage(Message message) {
         try
         {
             MapMessage mapMessage = (MapMessage) message;
@@ -33,8 +33,8 @@ public class MBassadorJMSEventListener implements MessageListener
 
                 Object eventClassInstance = gson.fromJson(eventDetails, clazz);
 
-                // publish the event
-                eventPublisher.publish(eventClassInstance);
+                // dispatch the event
+                eventDispatcher.dispatch((DomainEvent) eventClassInstance);
 
             }
 
@@ -46,7 +46,6 @@ public class MBassadorJMSEventListener implements MessageListener
         {
             throw new RuntimeException(e);
         }
-
 
     }
 }

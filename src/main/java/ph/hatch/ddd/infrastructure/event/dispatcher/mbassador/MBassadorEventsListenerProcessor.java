@@ -1,4 +1,4 @@
-package ph.hatch.ddd.infrastructure.events;
+package ph.hatch.ddd.infrastructure.event.dispatcher.mbassador;
 
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -7,11 +7,9 @@ import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.EnumMemberValue;
-import net.engio.mbassy.listener.Invoke;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
 import org.springframework.context.ApplicationContext;
@@ -19,17 +17,14 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import ph.hatch.ddd.domain.annotations.DomainEventListener;
 
-import java.lang.reflect.Method;
-
 @Component
-public class MBassadorEventsLIstenerProcessor  implements ApplicationContextAware, DestructionAwareBeanPostProcessor {
+public class MBassadorEventsListenerProcessor implements ApplicationContextAware, DestructionAwareBeanPostProcessor {
 
     @Autowired
     private ConfigurableListableBeanFactory beanFactory;
 
     @Autowired
-    @Qualifier("localPublisher")
-    private MBassadorEventsPublisher eventPublisher;
+    private MBassadorEventDispatcher eventDispatcher;
 
     protected ApplicationContext applicationContext;
 
@@ -102,7 +97,7 @@ public class MBassadorEventsLIstenerProcessor  implements ApplicationContextAwar
 //                    }
 //                }
 
-                eventPublisher.registerListener(bean);
+                eventDispatcher.registerListener(bean);
 
             }
 
