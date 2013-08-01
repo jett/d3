@@ -1,4 +1,4 @@
-package ph.hatch.ddd.domain;
+package ph.hatch.ddd.domain.annotations;
 
 import ph.hatch.ddd.domain.annotations.DomainEvent;
 

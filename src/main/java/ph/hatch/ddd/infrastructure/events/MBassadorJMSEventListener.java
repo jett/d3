@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import ph.hatch.ddd.domain.DomainEventPublisher;
+import ph.hatch.ddd.domain.annotations.DomainEventPublisher;
 
 import javax.jms.*;
 

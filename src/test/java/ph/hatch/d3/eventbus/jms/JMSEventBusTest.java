@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ph.hatch.d3.eventbus.test.DummyOneEvent;
-import ph.hatch.ddd.domain.DomainEventPublisher;
+import ph.hatch.ddd.domain.annotations.DomainEventPublisher;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations="classpath:spring-jms-beans.xml")

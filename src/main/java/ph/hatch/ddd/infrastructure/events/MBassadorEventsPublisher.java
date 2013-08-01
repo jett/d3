@@ -1,17 +1,11 @@
 package ph.hatch.ddd.infrastructure.events;
 
 
-import com.google.gson.Gson;
 import net.engio.mbassy.bus.BusConfiguration;
 import net.engio.mbassy.bus.MBassador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ph.hatch.ddd.application.ApplicationEventPublisher;
-import ph.hatch.ddd.domain.DomainEventPublisher;
-import ph.hatch.ddd.domain.annotations.DomainEvent;
-
-import java.io.Serializable;
-import java.util.Map;
+import ph.hatch.ddd.domain.annotations.DomainEventPublisher;
 
 @Component
 public class MBassadorEventsPublisher implements DomainEventPublisher  {

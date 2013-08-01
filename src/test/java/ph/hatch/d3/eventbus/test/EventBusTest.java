@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ph.hatch.ddd.domain.DomainEventPublisher;
+import ph.hatch.ddd.domain.annotations.DomainEventPublisher;
 
 /**
  * Created with IntelliJ IDEA.

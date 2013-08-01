@@ -1,14 +1,8 @@
 package ph.hatch.ddd.infrastructure.events;
 
 import org.springframework.stereotype.Component;
-import ph.hatch.ddd.application.ApplicationEventPublisher;
-import ph.hatch.ddd.domain.DomainEventPublisher;
+import ph.hatch.ddd.domain.annotations.DomainEventPublisher;
 import ph.hatch.ddd.domain.annotations.DomainEvent;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class SimpleEventPublisher implements DomainEventPublisher  {

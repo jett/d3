@@ -6,7 +6,7 @@ import net.engio.mbassy.bus.BusConfiguration;
 import net.engio.mbassy.bus.MBassador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ph.hatch.ddd.domain.DomainEventPublisher;
+import ph.hatch.ddd.domain.annotations.DomainEventPublisher;
 
 @Component
 public class JMSEventsPublisher implements DomainEventPublisher  {
