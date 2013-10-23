@@ -17,6 +17,8 @@
 
     <bean class="ph.hatch.ddd.infrastructure.event.publisher.simple.SimpleEventPublisher"/>
 
+    <bean class="ph.hatch.d3.infrastructure.event.publisher.simple.AutowiredItem"/>
+
     <!-- autoscan all event handlers -->
     <context:component-scan base-package="ph.hatch.d3.infrastructure.event.publisher.simple.eventhandlers"/>
 

@@ -15,7 +15,7 @@ public class TestJMSPublisher {
     DomainEventPublisher eventPublisher;
 
     @Test
-    public void testDispatch() {
+    public void testJMSDispatch() {
 
         TestEvent testEvent = new TestEvent("testevent message for jms");
 

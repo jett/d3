@@ -1,5 +1,6 @@
 package ph.hatch.ddd.infrastructure.event.dispatcher.mbassador;
 
+import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -10,6 +11,7 @@ import javassist.bytecode.annotation.EnumMemberValue;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
 import org.springframework.context.ApplicationContext;
@@ -50,6 +52,7 @@ public class MBassadorEventsListenerProcessor implements ApplicationContextAware
         try {
 
             ClassPool pool = ClassPool.getDefault();
+            pool.insertClassPath(new ClassClassPath(clazz));
             CtClass cc = pool.getCtClass(clazz.getName());
             ClassFile cf = cc.getClassFile();
 
@@ -82,13 +85,13 @@ public class MBassadorEventsListenerProcessor implements ApplicationContextAware
             if(mbassadorListener) {
 
                 cc.setName(clazz.getName()+"d3Proxy");
-                cc.writeFile();
+                //cc.writeFile();
 
                 // transform the ctClass to our new proxied Java class
                 Class proxiedBeanClass = cc.toClass();
 
                 // instantiate the bean
-                bean = proxiedBeanClass.newInstance();
+                // bean = proxiedBeanClass.newInstance();
 
 //                for(Method m : bean.getClass().getDeclaredMethods()) {
 //                    System.out.println(m.getName());
@@ -96,6 +99,22 @@ public class MBassadorEventsListenerProcessor implements ApplicationContextAware
 //                        System.out.println("\t" + a.toString());
 //                    }
 //                }
+
+                // patch to no injection on handler:
+                // http://stackoverflow.com/questions/3370161/how-to-programmatically-create-bean-definition-with-injected-properties
+                AutowireCapableBeanFactory beanFactory = applicationContext.getAutowireCapableBeanFactory();
+                Object newBean = beanFactory.createBean(proxiedBeanClass,AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, true );
+                //bean = beanFactory.createBean(proxiedBeanClass);
+                //beanFactory.autowireBean(bean);
+                bean = beanFactory.initializeBean(newBean, beanName);
+
+                //test 2
+//                bean = beanFactory.createBean(clazz,AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, true );
+//                beanFactory.autowireBean(bean);
+
+                // instantiate the bean
+//                bean = proxiedBeanClass.newInstance();
+//                beanFactory.autowireBean(bean);
 
                 eventDispatcher.registerListener(bean);
 
