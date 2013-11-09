@@ -1,0 +1,80 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd ">
+
+    <tx:annotation-driven/>
+
+    <!--properties-->
+    <context:property-placeholder location="classpath:oe/app.properties" ignore-unresolvable="true" local-override="true" />
+
+    <bean id="appProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:oe/app.properties</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true" />
+    </bean>
+    <!--end properties-->
+
+
+    <!--transaction manager-->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="mySessionFactory" />
+        <property name="globalRollbackOnParticipationFailure" value="false" />
+    </bean>
+
+
+    <!--end data source-->
+
+    <bean id="mySessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="myDataSource" />
+        <!--<property name="mappingDirectoryLocations">-->
+        <!--<list>-->
+        <!--<value>classpath:hibernate/domains</value>-->
+        <!--</list>-->
+        <!--</property>-->
+
+        <property name="packagesToScan">
+            <list>
+                <value>ph.hatch.ddd.oe.test.domain</value>
+            </list>
+        </property>
+
+        <!--<property name="annotatedClasses">-->
+            <!--<list>-->
+            <!--</list>-->
+        <!--</property>-->
+
+        <property name="hibernateProperties">
+            <props>
+                <!--<prop key="hibernate.dialect">${hibernate.dialect}</prop>-->
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <!--<prop key="hibernate.hbm2ddl.import_files">${hibernate.bootstrap}</prop>-->
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.connection.pool_size">${hibernate.connection.pool_size}</prop>
+                <!-- <prop key="hibernate.transaction.jta.platform">
+                     org.hibernate.service.jta.platform.internal.BitronixJtaPlatform
+                 </prop>-->
+            </props>
+        </property>
+    </bean>
+
+
+    <bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource" >
+        <property name="driverClassName" value="#{appProperties['jdbc.driverClassName']}" />
+        <property name="url" value="#{appProperties['jdbc.url']}"/>
+        <property name="username" value="#{appProperties['jdbc.username']}" />
+        <property name="password" value="#{appProperties['jdbc.password']}" />
+    </bean>
+
+</beans>

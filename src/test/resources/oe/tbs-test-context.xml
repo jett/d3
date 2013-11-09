@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <import resource="tbs-database-context.xml"/>
+
+    <!--component scanners-->
+    <!--<context:component-scan base-package="com.training.rest"></context:component-scan>-->
+
+    <bean id="oe" class="ph.hatch.ddd.oe.ObjectRegistry">
+        <constructor-arg>
+            <list>
+                <value>com.ucpb.trust</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="objectRepository" class="ph.hatch.ddd.oe.ObjectRepository"/>
+
+</beans>

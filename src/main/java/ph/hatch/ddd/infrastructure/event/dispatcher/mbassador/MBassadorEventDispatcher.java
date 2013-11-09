@@ -12,7 +12,7 @@ public class MBassadorEventDispatcher implements EventDispatcher {
     MBassador bus = new MBassador(BusConfiguration.Default());
 
     public void registerListener(Object listener) {
-        // System.out.println("registering a listener for " + listener );
+        System.out.println("registering a listener for " + listener );
         bus.subscribe(listener);
     }
 
