@@ -61,63 +61,111 @@ public class ObjectRegistry {
         for(Class entity : entities) {
 
             // get identity fields
-            Set<Field> fields = ReflectionUtils.getFields(entity, withAnnotation(DomainEntityIdentity.class));
+//            try {
 
-            if(fields.size() == 1) {
+                System.out.println("registering " + entity.getCanonicalName());
 
-                Field identityField =  (Field) fields.toArray()[0];
+                Set<Field> fields=null;
 
-                log.info("adding: " + entity.getCanonicalName() + " : " + identityField.getType().getCanonicalName());
+                try {
 
-                identityStore.put(entity, identityField.getName());
+                    fields = ReflectionUtils.getFields(entity, withAnnotation(DomainEntityIdentity.class));
 
-                //entityStore.put(entity.getCanonicalName(), identityField.getName());
-                // TODO, bug here if type is one of the base types
+                } catch(NoClassDefFoundError ncdfe) {
 
-                if(!identityField.getType().getCanonicalName().equalsIgnoreCase(String.class.getCanonicalName()) ) {
-                    entityStore.put(entity.getCanonicalName(), identityField.getType().getCanonicalName());
+                    log.severe("No class definition found for fields of the class!");
+
                 }
 
-                entityStore1.put(entity.getCanonicalName(), identityField.getType().getCanonicalName());
+                if(fields != null && fields.size() == 1) {
 
-            } else {
+                    Field identityField =  (Field) fields.toArray()[0];
 
-                // TODO: log error, DomainEntity may only have one identity field
+                    log.info("adding: " + entity.getCanonicalName() + " : " + identityField.getType().getCanonicalName());
 
-            }
+                    identityStore.put(entity, identityField.getName());
 
-            // get all fields
+                    //entityStore.put(entity.getCanonicalName(), identityField.getName());
+                    // TODO, bug here if type is one of the base types
 
-            ObjectMeta meta = new ObjectMeta(entity, entity.getCanonicalName());
+                    if(!identityField.getType().getCanonicalName().equalsIgnoreCase(String.class.getCanonicalName()) ) {
 
-            fields = ReflectionUtils.getAllFields(entity);
+                        if(entityStore.inverse().containsKey(identityField.getType().getCanonicalName())) {
 
-            for(Field field : fields) {
+                            System.out.println("Type " + identityField.getType().getCanonicalName() + " is already the key for another class");
+                            log.warning("Type " + identityField.getType().getCanonicalName() + " is already the key for another class");
 
-                //System.out.println(entity.getCanonicalName() + " : " + field.getName() + " > " + field.getType());
+                        } else {
 
-                // check if element is instance of a collection
-                if(Collection.class.isAssignableFrom(field.getType())) {
+                            entityStore.put(entity.getCanonicalName(), identityField.getType().getCanonicalName());
+                        }
 
-                    // only get parameterized types
-                    if(field.getGenericType() instanceof ParameterizedType) {
-
-                        ParameterizedType objectListType = (ParameterizedType) field.getGenericType();
-                        Class setClass = (Class<?>) objectListType.getActualTypeArguments()[0];
-
-                        //System.out.println("set : " + field.getType());
-                        //System.out.println("collection of " + setClass);
-
-                        meta.addCollectionField(field.getType(), setClass, field.getName());
 
                     }
 
-                } else {
-                    meta.addField(field.getType(), field.getName());
-                }
-            }
+                    entityStore1.put(entity.getCanonicalName(), identityField.getType().getCanonicalName());
 
-            metaStore.put(entity.getCanonicalName(), meta);
+                } else {
+
+                    // TODO: log error, DomainEntity may only have one identity field
+
+                }
+
+                // get all fields
+
+                ObjectMeta meta = new ObjectMeta(entity, entity.getCanonicalName());
+
+
+                // don't bother checking if we previously had errors retrieving the fields
+                if(fields != null) {
+
+                    fields = ReflectionUtils.getAllFields(entity);
+
+                    for(Field field : fields) {
+
+                        System.out.println("processing meta for : " + entity.getCanonicalName() + " : " + field.getName() + " > " + field.getType());
+
+                        // check if element is instance of a collection
+                        if(Collection.class.isAssignableFrom(field.getType())) {
+
+                            try {
+                                // only get parameterized types
+                                if(field.getGenericType() instanceof ParameterizedType) {
+
+                                    ParameterizedType objectListType = (ParameterizedType) field.getGenericType();
+                                    Class setClass = (Class<?>) objectListType.getActualTypeArguments()[0];
+
+                                    //System.out.println("set : " + field.getType());
+                                    //System.out.println("collection of " + setClass);
+
+                                    meta.addCollectionField(field.getType(), setClass, field.getName());
+
+                                }
+                            } catch(TypeNotPresentException tnpe) {
+
+                                System.out.println("field not found");
+                                log.severe("field type was not found. ");
+                            }
+
+                        } else {
+                            meta.addField(field.getType(), field.getName());
+                        }
+                    }
+
+                    metaStore.put(entity.getCanonicalName(), meta);
+                }
+
+//            } catch (IllegalStateException ise) {
+//
+//                log.severe("Error processing " + entity.getCanonicalName() + " caused by:  " + ise.getMessage());
+//                log.severe("ignoring!");
+//
+//            } catch (Exception e) {
+//
+//                log.severe("Error processing " + entity.getCanonicalName() + " caused by:  " + e.getMessage());
+//                log.severe("ignoring!");
+//
+//            }
 
         }
 
