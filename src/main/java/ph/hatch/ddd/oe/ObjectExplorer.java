@@ -72,7 +72,7 @@ public class ObjectExplorer {
         return fatMap;
     }
 
-    private Map expandHierarchy(Object object, Map<String, Object> base, Boolean includeMeta) {
+    private Map expandHierarchy(Object object, Map<String, Object> base, Boolean includeMeta, HashSet visited) {
 
         ObjectMeta meta = objectRegistry.getMetaForClass(object.getClass());
 
@@ -104,6 +104,13 @@ public class ObjectExplorer {
                     // get the object type of the entity
                     String entityIdentityClassName = fieldMeta.getClassName();
                     String entityClassName = objectRegistry.getClassForEntityIdentityField(entityIdentityClassName);
+
+                    // prevent circular-referencing children from getting reloaded
+                    if(visited.contains(entityIdentityClassName)) {
+                        flattenFields(base);
+                    } else {
+                        visited.add(entityIdentityClassName);
+                    }
 
                     // if we found an entity class, it means that the elements of the collection are entity identities
                     if(entityClassName != null) {
@@ -151,7 +158,10 @@ public class ObjectExplorer {
                                     if(result != null) {
 
                                         Map newEntryMap = gson.fromJson(gson.toJson(result), Map.class);
-                                        newEntryMap = expandHierarchy(result, newEntryMap, includeMeta);
+                                        newEntryMap = expandHierarchy(result, newEntryMap, includeMeta, visited);
+
+                                        // remove the entity identity after exploding it
+                                        visited.remove(entityIdentityClassName);
 
                                         Map newEntry = flattenFields(newEntryMap);
 
@@ -221,8 +231,10 @@ public class ObjectExplorer {
 
             gson = builder.create();
 
+            HashSet<String> visited = new HashSet();
+
             Map me = gson.fromJson(gson.toJson(object), Map.class);
-            Map expanded = expandHierarchy(object, me, includeMeta);
+            Map expanded = expandHierarchy(object, me, includeMeta, visited);
 
             return expanded;
         }

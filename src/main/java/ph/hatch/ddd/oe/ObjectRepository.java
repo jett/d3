@@ -1,6 +1,7 @@
 package ph.hatch.ddd.oe;
 
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -30,7 +31,7 @@ public class ObjectRepository<entityClass> {
 
     }
 
-    public Object loadByEntityId(Class<DomainEntity> entity, Object entityId) {
+    public Object loadByEntityId(Class<DomainEntity> entity, Object entityId, String... fetchMembers) {
 
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -43,6 +44,12 @@ public class ObjectRepository<entityClass> {
 
                 Criteria crit = session.createCriteria(clazz);
                 crit.add(Restrictions.eq(identityField, entityId));
+
+                // eagerly fetch select variables
+                for(String fetchMember: fetchMembers) {
+                    System.out.println("setting " + fetchMember + " to eager!");
+                    crit.setFetchMode(fetchMember, FetchMode.JOIN);
+                }
 
                 List result = crit.list();
 
