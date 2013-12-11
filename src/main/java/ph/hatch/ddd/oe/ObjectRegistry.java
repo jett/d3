@@ -63,7 +63,7 @@ public class ObjectRegistry {
             // get identity fields
 //            try {
 
-                System.out.println("registering " + entity.getCanonicalName());
+                // System.out.println("registering " + entity.getCanonicalName());
 
                 Set<Field> fields=null;
 
@@ -92,7 +92,7 @@ public class ObjectRegistry {
 
                         if(entityStore.inverse().containsKey(identityField.getType().getCanonicalName())) {
 
-                            System.out.println("Type " + identityField.getType().getCanonicalName() + " is already the key for another class");
+                            // System.out.println("Type " + identityField.getType().getCanonicalName() + " is already the key for another class");
                             log.warning("Type " + identityField.getType().getCanonicalName() + " is already the key for another class");
 
                         } else {
@@ -123,7 +123,7 @@ public class ObjectRegistry {
 
                     for(Field field : fields) {
 
-                        System.out.println("processing meta for : " + entity.getCanonicalName() + " : " + field.getName() + " > " + field.getType());
+                        // System.out.println("processing meta for : " + entity.getCanonicalName() + " : " + field.getName() + " > " + field.getType());
 
                         // check if element is instance of a collection
                         if(Collection.class.isAssignableFrom(field.getType())) {

@@ -107,7 +107,7 @@ public class ObjectExplorer {
 
                     // prevent circular-referencing children from getting reloaded
                     if(visited.contains(entityIdentityClassName)) {
-                        flattenFields(base);
+                        //flattenFields(base);
                     } else {
                         visited.add(entityIdentityClassName);
                     }
@@ -150,7 +150,8 @@ public class ObjectExplorer {
 
                                     // TODO: this is terribly inefficient since we have to hit the database for every element
                                     // of the collection, consider doing an "IN" query
-                                    Object result = objectRepository.load((Class<DomainEntity>) Class.forName(entityClassName), o);
+                                    Object result = null;
+                                    result = objectRepository.load((Class<DomainEntity>) Class.forName(entityClassName), o);
 
                                     String objectName = Class.forName(entityClassName).getSimpleName();
 
@@ -174,7 +175,9 @@ public class ObjectExplorer {
                                     }
 
                                 } catch(Exception e) {
+
                                     e.printStackTrace();
+
                                 }
                             }
                         }
