@@ -71,6 +71,8 @@ class TestOE {
 
         println mymap.employeeIds.size()
 
+        println gson.toJson(mymap)
+
         mymap.employeeIds.each() { employee ->
             println employee.Employee.firstName +  " " + employee.Employee.lastName
         }

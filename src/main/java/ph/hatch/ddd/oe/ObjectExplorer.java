@@ -105,9 +105,11 @@ public class ObjectExplorer {
                     String entityIdentityClassName = fieldMeta.getClassName();
                     String entityClassName = objectRegistry.getClassForEntityIdentityField(entityIdentityClassName);
 
+                    Boolean hasBeenVisited = visited.contains(entityIdentityClassName);
+
                     // prevent circular-referencing children from getting reloaded
-                    if(visited.contains(entityIdentityClassName)) {
-                        //flattenFields(base);
+                    if(hasBeenVisited) {
+                        return flattenFields(base);
                     } else {
                         visited.add(entityIdentityClassName);
                     }
@@ -157,6 +159,8 @@ public class ObjectExplorer {
 
                                     // only create a new entry if we found a matching record
                                     if(result != null) {
+
+                                        //System.out.println("OBJECT IS: " + entityClassName + " ID " + idValue);
 
                                         Map newEntryMap = gson.fromJson(gson.toJson(result), Map.class);
                                         newEntryMap = expandHierarchy(result, newEntryMap, includeMeta, visited);
