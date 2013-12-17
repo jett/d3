@@ -8,11 +8,11 @@ import java.util.Date;
 
 @Entity
 @Table(name = "EMPLOYEE")
+@PrimaryKeyJoinColumn(name="PERSON_ID")
 @DomainEntity
 public class Employee extends Person {
 
-    @EmbeddedId
-    @DomainEntityIdentity
+    @Embedded
     ph.hatch.ddd.oe.test.domain.EmployeeId employeeId;
 
     @Embedded
@@ -25,9 +25,9 @@ public class Employee extends Person {
 
     }
 
-    public Employee(String employeeId, String firstName, String lastName) {
+    public Employee(String personId, String firstName, String lastName) {
 
-        this.employeeId = new EmployeeId(employeeId);
+        this.personId = new PersonId(personId);
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -36,9 +36,9 @@ public class Employee extends Person {
 
     }
 
-    public Employee(String employeeId, String firstName, String lastName, ProvinceCode birthProvinceCode) {
+    public Employee(String personId, String firstName, String lastName, ProvinceCode birthProvinceCode) {
 
-        this.employeeId = new EmployeeId(employeeId);
+        this.personId= new PersonId(personId);
 
         this.firstName = firstName;
         this.lastName = lastName;

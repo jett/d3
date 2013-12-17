@@ -27,12 +27,12 @@ public class Department {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable
             (
-                    name="DEPT_EMPLOYEES",
+                    name="DEPT_PERSON",
                     joinColumns=@JoinColumn(name="DEPT_ID")
             )
     @Fetch(value = org.hibernate.annotations.FetchMode.SELECT)
-    @Column(name="EMP_ID")
-    Set<EmployeeId> employeeIds;
+    @Column(name="PERSON_ID")
+    Set<PersonId> personIds;
 
     public Department(){
 
@@ -43,14 +43,14 @@ public class Department {
         departmentId = new DepartmentId(id);
         this.departmentName = name;
 
-        this.employeeIds = new HashSet<EmployeeId>();
+        this.personIds = new HashSet<PersonId>();
         this.budget = new BigDecimal(20000000);
 
     }
 
-    public void addEmployee(EmployeeId employeeId) {
+    public void addPerson(PersonId personId) {
 
-        employeeIds.add(employeeId);
+        personIds.add(personId);
 
     }
 
@@ -64,7 +64,7 @@ public class Department {
 
     public Set getEmployees() {
 
-        return employeeIds;
+        return personIds;
 
     }
 

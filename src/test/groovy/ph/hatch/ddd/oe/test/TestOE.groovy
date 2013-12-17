@@ -6,11 +6,9 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.transaction.annotation.Transactional
-import ph.hatch.ddd.domain.annotations.DomainEntity
 import ph.hatch.ddd.oe.OESerializers
 import ph.hatch.ddd.oe.ObjectExplorer
 import ph.hatch.ddd.oe.ObjectRegistry
@@ -36,17 +34,17 @@ class TestOE {
         objectRepository.persist(new Country("PH", "Philippines"));
         objectRepository.persist(new Province("001", "NCR", new CountryCode("PH")));
 
-        objectRepository.persist(new Employee("EMP-001", "Jett", "Gamboa", new ProvinceCode("001")))
-        objectRepository.persist(new Employee("EMP-002", "Anne", "Gamboa"))
-        objectRepository.persist(new Employee("EMP-003", "Juan", "dela Cruz"))
+        objectRepository.persist(new Employee("PER-001", "Jett", "Gamboa", new ProvinceCode("001")))
+        objectRepository.persist(new Employee("PER-002", "Anne", "Gamboa"))
+        objectRepository.persist(new Employee("PER-003", "Juan", "dela Cruz"))
 
-        Object result = objectRepository.load(Employee.class, new EmployeeId("EMP-003"))
+        Object result = objectRepository.load(Employee.class, new PersonId("PER-003"))
 
         //println gson.fromJson(gson.toJson(result), Map.class)
 
         Department department = new Department("OPS", "Operations")
-        department.addEmployee(new EmployeeId("EMP-001"))
-        department.addEmployee(new EmployeeId("EMP-003"))
+        department.addPerson(new PersonId("PER-001"))
+        department.addPerson(new PersonId("PER-003"))
 
         objectRepository.persist(department)
 
@@ -69,19 +67,19 @@ class TestOE {
 
         Map mymap = objectExplorer.explore(department, true)
 
-        println mymap.employeeIds.size()
+        println mymap.personIds.size()
 
         println gson.toJson(mymap)
 
-        mymap.employeeIds.each() { employee ->
-            println employee.Employee.firstName +  " " + employee.Employee.lastName
+        mymap.personIds.each() { employee ->
+            println employee.Person.firstName +  " " + employee.Person.lastName  + " " + employee.Person.birthProvinceCode?.Province?.name
         }
         //[0].Employee.firstName
 
 
         OESerializers oeSerializers = new OESerializers();
 
-        println oeSerializers.maptoxml(mymap, "Department")
+        //println oeSerializers.maptoxml(mymap, "Department")
 
 
     }

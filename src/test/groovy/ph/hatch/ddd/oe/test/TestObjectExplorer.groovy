@@ -7,7 +7,7 @@ import ph.hatch.ddd.oe.ObjectRegistry
 import ph.hatch.ddd.oe.test.domain.Department
 import ph.hatch.ddd.oe.test.domain.DepartmentId
 import ph.hatch.ddd.oe.test.domain.Employee
-import ph.hatch.ddd.oe.test.domain.EmployeeId
+import ph.hatch.ddd.oe.test.domain.PersonId
 import ph.hatch.ddd.oe.test.domain.repository.DepartmentMemRepository
 import ph.hatch.ddd.oe.test.domain.repository.EmployeeMemRepository
 
@@ -24,11 +24,11 @@ class TestObjectExplorer {
         EmployeeMemRepository employeeRepository = new EmployeeMemRepository()
         DepartmentMemRepository departmentRepository = new DepartmentMemRepository()
 
-        employeeRepository.save(new Employee("EMP-001", "Jett", "Gamboa"))
-        employeeRepository.save(new Employee("EMP-002", "Anne", "Gamboa"))
+        employeeRepository.save(new Employee("PER-001", "Jett", "Gamboa"))
+        employeeRepository.save(new Employee("PER-002", "Anne", "Gamboa"))
 
         Department department = new Department("OPS", "Operations")
-        department.addEmployee(new EmployeeId("EMP-001"))
+        department.addPerson(new PersonId("PER-001"))
 
         departmentRepository.save(department)
 
