@@ -76,8 +76,6 @@ public class ObjectExplorer {
 
         ObjectMeta meta = objectRegistry.getMetaForClass(object.getClass());
 
-        //Gson gson = new GsonBuilder().serializeNulls().setDateFormat(dateFormat).create();
-
         // TODO : deeply nested stuff here, refactor by breaking down
         for(String key : base.keySet()) {
 
@@ -88,31 +86,26 @@ public class ObjectExplorer {
             // check if the field is an entity identity, if it is we expand using the entity identity
             if(classForIdentity != null) {
 
+                // get the object type of the entity
+                String entityIdentityClassName = fieldMeta.getClassName();
+                String entityClassName = objectRegistry.getClassForEntityIdentityField(entityIdentityClassName);
+
+                Boolean hasBeenVisited = visited.contains(entityIdentityClassName);
+
+                // prevent circular-referencing children from getting reloaded
+                if(hasBeenVisited) {
+                    continue;
+                }
+
                 // only expand for identities that are not for this parent
-                //if(!classForIdentity.equalsIgnoreCase(object.getClass().getCanonicalName())) {
                 Boolean isInstance = false;
                 try {
                     isInstance = Class.forName(classForIdentity).isAssignableFrom(object.getClass());
                 } catch(Exception e) {
-
+                    e.printStackTrace();
                 }
 
-                //TODO: bug here if subclass
-                //if(!classForIdentity.equalsIgnoreCase(object.getClass().getCanonicalName())) {
                 if(!isInstance) {
-
-                    // get the object type of the entity
-                    String entityIdentityClassName = fieldMeta.getClassName();
-                    String entityClassName = objectRegistry.getClassForEntityIdentityField(entityIdentityClassName);
-
-                    Boolean hasBeenVisited = visited.contains(entityIdentityClassName);
-
-                    // prevent circular-referencing children from getting reloaded
-                    if(hasBeenVisited) {
-                        return flattenFields(base);
-                    } else {
-                        visited.add(entityIdentityClassName);
-                    }
 
                     // if we found an entity class, it means that the elements of the collection are entity identities
                     if(entityClassName != null) {
@@ -161,6 +154,8 @@ public class ObjectExplorer {
                                     if(result != null) {
 
                                         //System.out.println("OBJECT IS: " + entityClassName + " ID " + idValue);
+
+                                        visited.add(entityIdentityClassName);
 
                                         Map newEntryMap = gson.fromJson(gson.toJson(result), Map.class);
                                         newEntryMap = expandHierarchy(result, newEntryMap, includeMeta, visited);
@@ -220,7 +215,10 @@ public class ObjectExplorer {
 
     }
 
-    public void exploreStructure(Object object) {
+    public void exploreStructure(Class clazz) {
+
+
+
 
     }
 
@@ -239,6 +237,12 @@ public class ObjectExplorer {
             gson = builder.create();
 
             HashSet<String> visited = new HashSet();
+
+            // add the current identity class to visited so we don't dig this in the "future"
+            String entityIdentity = objectRegistry.getEntityIdentityFieldname(object.getClass());
+            if(entityIdentity != null) {
+                visited.add(entityIdentity);
+            }
 
             Map me = gson.fromJson(gson.toJson(object), Map.class);
             Map expanded = expandHierarchy(object, me, includeMeta, visited);

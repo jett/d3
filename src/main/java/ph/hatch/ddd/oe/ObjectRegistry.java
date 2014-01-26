@@ -71,6 +71,18 @@ public class ObjectRegistry {
 
                     fields = ReflectionUtils.getFields(entity, withAnnotation(DomainEntityIdentity.class));
 
+                    // TODO : experimental fix
+//                    // added to also store entity identity lookups for subclasses
+//                    if(fields == null) {
+//
+//                        Set<Class<?>> superClazzes = ReflectionUtils.getAllSuperTypes(entity);
+//                        for(Class superClass : superClazzes) {
+//                            if(fields == null) {
+//                                fields = ReflectionUtils.getFields(superClass, withAnnotation(DomainEntityIdentity.class));
+//                            }
+//                        }
+//                    }
+
                 } catch(NoClassDefFoundError ncdfe) {
 
                     log.severe("No class definition found for fields of the class!");
@@ -185,6 +197,12 @@ public class ObjectRegistry {
 
     public BiMap getEntityStore() {
         return entityStore;
+    }
+
+    public Set getEntities() {
+
+        return entityStore.keySet();
+
     }
 
 
