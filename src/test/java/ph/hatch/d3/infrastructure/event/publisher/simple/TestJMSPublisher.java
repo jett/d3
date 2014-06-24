@@ -30,4 +30,23 @@ public class TestJMSPublisher {
 
     }
 
+    @Test
+    public void testExecutor() {
+
+        try {
+            TestEvent testEvent = new TestEvent("testevent message for jms");
+
+            eventPublisher.publish(testEvent);
+            Thread.sleep(5000);
+
+            testEvent = new TestEvent("testevent message for jms 2");
+            eventPublisher.publish(testEvent);
+
+            Thread.sleep(5000);
+
+        } catch(Exception e) {
+            System.out.println("exception");
+        }
+    }
+
 }

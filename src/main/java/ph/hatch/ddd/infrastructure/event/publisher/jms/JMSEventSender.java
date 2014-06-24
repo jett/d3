@@ -43,9 +43,9 @@ public class JMSEventSender {
         }
     }
 
-    public void send(EventEnvelope eventEnvelope) {
+    public void send(EventEnvelope eventEnvelope) throws JMSException {
 
-        try {
+//        try {
 
             Connection conn = connectionFactory.createConnection();
             Session session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -57,9 +57,9 @@ public class JMSEventSender {
 
             producer.send(message);
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
     }
 
 }

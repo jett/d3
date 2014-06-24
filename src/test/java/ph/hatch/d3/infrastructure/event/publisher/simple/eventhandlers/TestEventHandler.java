@@ -27,11 +27,12 @@ public class TestEventHandler {
 
         System.out.println("handled event  " + testEvent);
         System.out.println(autowiredItem.getMessage());
-        if(autowiredItem==null) {
-            System.out.println("i was not autowired");
-        } else {
-            System.out.println("autowired");
-        }
+
+//        if(autowiredItem==null) {
+//            System.out.println("i was not autowired");
+//        } else {
+//            System.out.println("autowired");
+//        }
 
 //        System.out.println("check autowired: " + autowiredItem.getMessage());
 //        System.out.println("autowired");

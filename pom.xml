@@ -7,7 +7,7 @@
 
     <groupId>ph.hatch</groupId>
     <artifactId>d3</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <properties>
         <springframework.version>3.1.1.RELEASE</springframework.version>
         <hornetq.version>2.3.0.Final</hornetq.version>
@@ -203,6 +203,20 @@
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>2.2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+
+        <!-- for jms dispatch file poller -->
+        <!--https://github.com/spring-projects/spring-integration-samples/blob/master/intermediate/file-processing/pom.xml-->
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-file</artifactId>
+            <version>3.0.2.RELEASE</version>
         </dependency>
 
 
