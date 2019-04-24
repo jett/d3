@@ -9,7 +9,7 @@
     <artifactId>d3</artifactId>
     <version>1.1-SNAPSHOT</version>
     <properties>
-        <springframework.version>3.1.1.RELEASE</springframework.version>
+        <springframework.version>4.3.17.RELEASE</springframework.version>
         <hornetq.version>2.3.0.Final</hornetq.version>
         <commons-dbcp.version>1.2.2</commons-dbcp.version>
         <hibernate.version>4.1.4.Final</hibernate.version>
